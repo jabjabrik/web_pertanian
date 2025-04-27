@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/img/favicon/favicon-16x16.png'); ?>">
     <link rel="manifest" href="<?= base_url('assets/img/favicon/site.webmanifest'); ?>">
 
-    <title>PBB | <?= $title ?></title>
+    <title>Pertanian | <?= $title ?></title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
