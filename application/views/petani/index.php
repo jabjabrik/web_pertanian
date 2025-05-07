@@ -33,7 +33,6 @@
                                             <th class="align-middle text-center" rowspan="2">NIK</th>
                                             <th class="align-middle text-center" rowspan="2">Nama</th>
                                             <th class="align-middle text-center no-sort" rowspan="2">Alamat</th>
-                                            <th class="align-middle text-center no-sort" rowspan="2">RT/RW</th>
                                             <th class="align-middle text-center no-sort" rowspan="2">L.Tanah</th>
                                             <th class="align-middle text-center" colspan="3">Rencana Tanam Bulanan</th>
                                             <th class="align-middle text-center no-sort" rowspan="2">SPPT</th>
@@ -51,21 +50,24 @@
                                             <tr>
                                                 <td><?= $no ?></td>
                                                 <td><?= $item->nik ?></td>
-                                                <td><?= $item->nama ?></td>
-                                                <td><?= $item->alamat ?></td>
-                                                <td><?= "$item->rt/$item->rw" ?></td>
+                                                <td style="white-space: wrap;"><?= $item->nama ?></td>
+                                                <td style="white-space: wrap;"><?= $item->alamat ?></td>
                                                 <td><?= $item->luas_tanah ?> hektar</td>
                                                 <td><?= $item->jenis_tanaman_1 ?></td>
                                                 <td><?= $item->jenis_tanaman_2 ?></td>
                                                 <td><?= $item->jenis_tanaman_3 ?></td>
                                                 <td>
-                                                    <a target="_blank" style="text-transform: none; " href="<?= base_url("uploads/$item->foto_sppt") ?>">
-                                                        <i class="bi bi-box-arrow-up-right"></i> lihat
-                                                    </a>
+                                                    <?php if ($item->foto_sppt): ?>
+                                                        <a target="_blank" style="text-transform: none; " href="<?= base_url("uploads/$item->foto_sppt") ?>">
+                                                            <i class="bi bi-box-arrow-up-right"></i> lihat
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <span>-</span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($this->session->userdata('role') == 'kelompok tani') : ?>
-                                                        <?php $petani_update = "$item->nik,$item->nama,$item->alamat,$item->rt,$item->rw,$item->luas_tanah,$item->jenis_tanaman_1,$item->jenis_tanaman_2,$item->jenis_tanaman_3,$item->foto_sppt"; ?>
+                                                        <?php $petani_update = "$item->nik,$item->nama,$item->alamat,$item->luas_tanah,$item->jenis_tanaman_1,$item->jenis_tanaman_2,$item->jenis_tanaman_3,$item->foto_sppt"; ?>
                                                         <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_form" onclick="setForm('edit', '<?= $petani_update ?>', '<?= $item->id_petani ?>')">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </button>
@@ -98,7 +100,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="modal-form" method="post" action="<?= base_url('staf_desa/create') ?>" enctype="multipart/form-data">
+                <form id="modal-form" method="post" action="<?= base_url('petani/create') ?>" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="row">
                             <input name="id_petani" id="id_petani" hidden>
@@ -113,14 +115,6 @@
                             <div class="form-group col-4">
                                 <label for="alamat">Alamat</label>
                                 <input type="text" id="alamat" name="alamat" class="form-control" placeholder="Alamat" required>
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="rt">RT</label>
-                                <input type="text" id="rt" name="rt" class="form-control" placeholder="RW" required>
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="rw">RW</label>
-                                <input type="text" id="rw" name="rw" class="form-control" placeholder="RW" required>
                             </div>
                             <div class="form-group col-4">
                                 <label for="luas_tanah">Luas Tanah(ha)</label>
@@ -140,7 +134,7 @@
                             </div>
                             <div class="form-group col-6">
                                 <label for="id_sppt">Upload Foto SPPT (*Maksimal 2mb)</label>
-                                <input type="file" id="foto_sppt" name="foto_sppt" class="form-control-file" required accept="image/*" onchange="showPreview(event);">
+                                <input type="file" id="foto_sppt" name="foto_sppt" class="form-control-file" accept="image/*" onchange="showPreview(event);">
                             </div>
                             <div class="col-6">
                                 <img class="img-fluid" style="max-height: 200px;" id="foto_sppt_preview">
@@ -165,8 +159,6 @@
         const nik = document.querySelector('#nik');
         const nama = document.querySelector('#nama');
         const alamat = document.querySelector('#alamat');
-        const rt = document.querySelector('#rt');
-        const rw = document.querySelector('#rw');
         const luas_tanah = document.querySelector('#luas_tanah');
         const jenis_tanaman_1 = document.querySelector('#jenis_tanaman_1');
         const jenis_tanaman_2 = document.querySelector('#jenis_tanaman_2');
@@ -180,8 +172,6 @@
             nik.value = ''
             nama.value = ''
             alamat.value = ''
-            rt.value = ''
-            rw.value = ''
             luas_tanah.value = ''
             jenis_tanaman_1.value = ''
             jenis_tanaman_2.value = ''
@@ -210,13 +200,11 @@
                 nik.value = petani[0]
                 nama.value = petani[1]
                 alamat.value = petani[2]
-                rt.value = petani[3]
-                rw.value = petani[4]
-                luas_tanah.value = petani[5]
-                jenis_tanaman_1.value = petani[6]
-                jenis_tanaman_2.value = petani[7]
-                jenis_tanaman_3.value = petani[8]
-                previewFotoSPPT.setAttribute('src', `uploads/${petani[10]}`)
+                luas_tanah.value = petani[3]
+                jenis_tanaman_1.value = petani[4]
+                jenis_tanaman_2.value = petani[5]
+                jenis_tanaman_3.value = petani[6]
+                previewFotoSPPT.setAttribute('src', `uploads/${petani[7]}`)
                 foto_sppt.removeAttribute('required')
                 return
             }

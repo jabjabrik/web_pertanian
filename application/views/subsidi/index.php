@@ -220,7 +220,7 @@
                             </div>
                             <div class="form-group col-6">
                                 <label for="jenis_pupuk_1">Jenis Pupuk Bulan 1 - 4</label>
-                                <select class="form-control" id="jenis_pupuk_1" name="jenis_pupuk_1" required>
+                                <select class="form-control" id="jenis_pupuk_1" name="jenis_pupuk_1">
                                     <option value="" selected>--</option>
                                     <option value="pupuk urea">pupuk urea</option>
                                     <option value="pupuk NPK">pupuk NPK</option>
@@ -231,7 +231,7 @@
                             </div>
                             <div class="form-group col-6">
                                 <label for="jenis_pupuk_2">Jenis Pupuk Bulan 5 - 8</label>
-                                <select class="form-control" id="jenis_pupuk_2" name="jenis_pupuk_2" required>
+                                <select class="form-control" id="jenis_pupuk_2" name="jenis_pupuk_2">
                                     <option value="" selected>--</option>
                                     <option value="pupuk urea">pupuk urea</option>
                                     <option value="pupuk NPK">pupuk NPK</option>
@@ -242,7 +242,7 @@
                             </div>
                             <div class="form-group col-6">
                                 <label for="jenis_pupuk_3">Jenis Pupuk Bulan 9 - 12</label>
-                                <select class="form-control" id="jenis_pupuk_3" name="jenis_pupuk_3" required>
+                                <select class="form-control" id="jenis_pupuk_3" name="jenis_pupuk_3">
                                     <option value="" selected>--</option>
                                     <option value="pupuk urea">pupuk urea</option>
                                     <option value="pupuk NPK">pupuk NPK</option>
