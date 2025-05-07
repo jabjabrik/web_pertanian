@@ -27,15 +27,14 @@
     </style>
 </head>
 
-<body class="d-flex" style="height:100vh; background-color: #eaeaeac4;">
-
+<body class="bg-gradient-primary d-flex" style="height: 100vh; background-image: url('<?= base_url('assets/img/background.jpg') ?>'); background-size: cover; background-position: center;">
     <div id="login" style="position: absolute; top: 10px; right: 15px; cursor: pointer;">
         <a href="<?= base_url('auth'); ?>"><i class="bi bi-three-dots-vertical text-black"></i></a>
     </div>
 
     <!-- <div class="border bg-danger rounded m-auto" style="width: 400px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore quo enim, at maiores aspernatur eos velit omnis quaerat suscipit, vel ipsa dolores facilis autem expedita neque recusandae eveniet voluptatum debitis.</div> -->
     <div class="container m-auto">
-        <div class="card mx-auto shadow-lg" style="max-width: 600px;">
+        <div class="card mx-auto shadow-lg" style="max-width: 600px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px);">
             <div class="card-body my-4 md-mx-3 mx-0">
                 <h3 class="card-title fs-4 text-center">
                     Cek Status Subsidi RDKK
