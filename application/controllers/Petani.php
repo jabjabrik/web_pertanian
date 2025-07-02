@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style;
+
 class Petani extends CI_Controller
 {
     public function __construct()
@@ -15,6 +20,44 @@ class Petani extends CI_Controller
         $data['petani'] = $this->db->get('petani')->result();
         $data['title'] = 'Petani';
         $this->load->view('petani/index', $data);
+    }
+
+    public function import()
+    {
+        $file_tmp = $_FILES['import_file']['tmp_name'];
+        $spreadsheet = IOFactory::load($file_tmp);
+        $data = [];
+
+        foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+            $highestRow = $worksheet->getHighestRow();
+            $highestColumn = $worksheet->getHighestColumn();
+
+            for ($row = 4; $row <= $highestRow; $row++) {
+                $nama = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
+                $nik = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
+                $alamat = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
+                $luas_tanah = $worksheet->getCellByColumnAndRow(15, $row)->getValue();
+                $jenis_tanaman_1 = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
+                $jenis_tanaman_2 = $worksheet->getCellByColumnAndRow(20, $row)->getValue();
+                $jenis_tanaman_3 = $worksheet->getCellByColumnAndRow(26, $row)->getValue();
+
+                $data[] = [
+                    'nama' => $nama,
+                    'nik' => str_replace("`", '', $nik),
+                    'alamat' => $alamat,
+                    'luas_tanah' => $luas_tanah,
+                    'jenis_tanaman_1' => $jenis_tanaman_1,
+                    'jenis_tanaman_2' => $jenis_tanaman_2,
+                    'jenis_tanaman_3' => $jenis_tanaman_3,
+                ];
+            }
+        }
+
+
+        $this->db->insert_batch('petani', $data);
+
+        set_alert('Data Petani Berhasil di Import.', 'success');
+        redirect("petani");
     }
 
     public function create()

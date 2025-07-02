@@ -112,6 +112,16 @@
                                                                     <i class="bi bi-pencil-square"></i>
                                                                 </button>
                                                             <?php endif ?>
+                                                            <?php if ($item->validasi_bpp == 'ditolak') : ?>
+                                                                <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#modal_pesan" onclick="form_pesan('Penolakan BPP', '<?= $item->penolakan_bpp ?>')">
+                                                                    <i class="bi bi-bell-fill"></i>
+                                                                </button>
+                                                            <?php endif ?>
+                                                            <?php if ($item->validasi_desa == 'ditolak') : ?>
+                                                                <button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal_pesan" onclick="form_pesan('Penolakan Desa', '<?= $item->penolakan_desa ?>')">
+                                                                    <i class="bi bi-bell-fill"></i>
+                                                                </button>
+                                                            <?php endif ?>
                                                         <?php else : ?>
                                                             <?php if ($item->id_subsidi) : ?>
                                                                 <a href="<?= base_url("subsidi/delete/$item->id_subsidi") ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data?');">
@@ -125,9 +135,14 @@
                                                                     </a>
                                                                 <?php endif ?>
                                                                 <?php if ($item->validasi_bpp == 'proses' || $item->validasi_bpp == 'disetujui') : ?>
-                                                                    <a href="<?= base_url("subsidi/reject/$item->id_subsidi/$role") ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menolak data subsidi?');">
+                                                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal_penolakan" onclick="set_form_penolakan('<?= $item->id_subsidi ?>', 'bpp')">
                                                                         <i class="bi bi-x-circle"></i>
-                                                                    </a>
+                                                                    </button>
+                                                                <?php endif ?>
+                                                                <?php if ($item->validasi_bpp == 'ditolak') : ?>
+                                                                    <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#modal_pesan" onclick="form_pesan('Penolakan BPP', '<?= $item->penolakan_bpp ?>')">
+                                                                        <i class="bi bi-bell-fill"></i>
+                                                                    </button>
                                                                 <?php endif ?>
                                                             <?php else : ?>
                                                                 <?php if ($item->validasi_desa == 'proses' || $item->validasi_desa == 'ditolak') : ?>
@@ -136,9 +151,14 @@
                                                                     </a>
                                                                 <?php endif ?>
                                                                 <?php if ($item->validasi_desa == 'proses' || $item->validasi_desa == 'disetujui') : ?>
-                                                                    <a href="<?= base_url("subsidi/reject/$item->id_subsidi/$role") ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menolak data subsidi?');">
+                                                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modal_penolakan" onclick="set_form_penolakan('<?= $item->id_subsidi ?>', 'desa')">
                                                                         <i class="bi bi-x-circle"></i>
-                                                                    </a>
+                                                                    </button>
+                                                                <?php endif ?>
+                                                                <?php if ($item->validasi_desa == 'ditolak') : ?>
+                                                                    <button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal_pesan" onclick="form_pesan('Penolakan Desa', '<?= $item->penolakan_desa ?>')">
+                                                                        <i class="bi bi-bell-fill"></i>
+                                                                    </button>
                                                                 <?php endif ?>
                                                             <?php endif ?>
                                                         <?php endif ?>
@@ -199,6 +219,59 @@
         </div>
     </div>
     <!-- End Modal Subsidi -->
+
+    <!-- Modal Form Pesan -->
+    <div class="modal fade" id="modal_pesan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="text-transform: capitalize;">Pesan Penolakan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Anda tidak dapat mengedit data subsidi pupuk yang sudah disetujui.</p>
+                    <p>Silakan hubungi petugas BPP atau Desa untuk melakukan perubahan data.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Form -->
+
+    <!-- Modal Form -->
+    <div class="modal fade" id="modal_penolakan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Form Penolakan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="modal-form" method="post" action="<?= base_url('subsidi/reject') ?>">
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="text" name="id_subsidi" id="id_subsidi" hidden>
+                            <input type="text" name="role" id="role" hidden>
+                            <div class="form-group col-12">
+                                <label for="pesan_penolakan">Pesan Penolakan</label>
+                                <input type="text" id="pesan_penolakan" name="pesan_penolakan" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button id="btn-modal-submit" type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Form -->
 
     <!-- Modal Form -->
     <div class="modal fade" id="modal_form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -335,6 +408,24 @@
             } else {
                 pupuk_3.innerHTML = '-'
             }
+        }
+
+
+        const set_form_penolakan = (id, role) => {
+            const modal_penolakan = document.querySelector('#modal_penolakan');
+
+            modal_penolakan.querySelector('#id_subsidi').value = id;
+            modal_penolakan.querySelector('#role').value = role;
+        }
+
+        const form_pesan = (title, msg) => {
+            const modalPenolakan = document.querySelector('#modal_pesan');
+            const modalTitle = modalPenolakan.querySelector('.modal-title');
+            const modalBody = modalPenolakan.querySelector('.modal-body');
+
+            modalTitle.textContent = title;
+            modalBody.innerHTML = `<p>${msg}</p>`;
+
         }
     </script>
     <!-- End Script Form -->

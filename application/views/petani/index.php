@@ -16,6 +16,9 @@
                     <?php $this->view('templates/alert'); ?>
                     <!-- End Alert -->
                     <?php if ($this->session->userdata('role') == 'kelompok tani') : ?>
+                        <button class="ml-1 d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#modal_form_import" onclick="setForm('tambah')">
+                            <i class="bi bi-cloud-arrow-up"></i> Import Data
+                        </button>
                         <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modal_form" onclick="setForm('tambah')">
                             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data Petani
                         </button>
@@ -150,6 +153,36 @@
         </div>
     </div>
     <!-- End Modal Form -->
+
+    <!-- Modal Form Import -->
+    <div class="modal fade" id="modal_form_import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="text-transform: capitalize;">Import File Exel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="<?= base_url("petani/import") ?>" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="import_file">Import Data Petani</label>
+                                <input type="file" id="import_file" name="import_file" class="form-control-file" required accept=".xls, .xlsx">
+                                <small id="emailHelp" class="form-text text-muted">File yang harus diupload : .xls, xlsx</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button id="btn-modal-submit" type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Form Import -->
 
     <!-- Script Form -->
     <script>

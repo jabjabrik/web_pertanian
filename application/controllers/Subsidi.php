@@ -82,23 +82,26 @@ class Subsidi extends CI_Controller
         redirect('subsidi');
     }
 
-    public function reject($id_subsidi, $role)
+    public function reject()
     {
-        $data = array();
+        $id_subsidi =  $this->input->post('id_subsidi');
+        $role =  $this->input->post('role');
+        $pesan_penolakan =  $this->input->post('pesan_penolakan');
+
         if ($role == 'bpp') {
             $data['validasi_bpp'] = 'ditolak';
-        } else {
+            $data['penolakan_bpp'] = $pesan_penolakan;
+        }
+
+        if ($role == 'desa') {
             $data['validasi_desa'] = 'ditolak';
+            $data['penolakan_desa'] = $pesan_penolakan;
         }
 
         $this->db->where('id_subsidi', $id_subsidi);
         $result = $this->db->update('subsidi_pupuk', $data);
 
-        if ($result) {
-            set_alert('Data Subsidi Berhasil di Tolak.', 'success');
-        } else {
-            set_alert('Data Subsidi Gagal di Tolak.', 'danger');
-        }
+        set_alert('Data Subsidi Berhasil di Tolak.', 'success');
         redirect('subsidi');
     }
 
