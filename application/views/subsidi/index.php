@@ -17,9 +17,15 @@
                     <!-- End Alert -->
 
                     <?php if ($this->session->userdata('role') != 'kelompok tani') : ?>
-                        <a href="<?= base_url('subsidi/report') ?>" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
-                            <i class="bi bi-printer"></i> Buat Laporan
-                        </a>
+                        <div class="btn-group" role="group">
+                            <a href="<?= base_url('subsidi/report') ?>" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-printer"></i> Buat Laporan
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="<?= base_url('subsidi/report/excel') ?>" target="_blank">Laporan Excel</a>
+                                <a class="dropdown-item" href="<?= base_url('subsidi/report/pdf') ?>" target="_blank">Laporan PDF</a>
+                            </div>
+                        </div>
                     <?php endif ?>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">

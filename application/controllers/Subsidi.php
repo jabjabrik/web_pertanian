@@ -7,6 +7,7 @@ class Subsidi extends CI_Controller
     {
         parent::__construct();
         is_logged_in();
+        $this->load->library('Dompdf_lib');
     }
 
     public function index()
@@ -15,11 +16,6 @@ class Subsidi extends CI_Controller
             FROM petani
             LEFT JOIN subsidi_pupuk ON subsidi_pupuk.id_petani = petani.id_petani";
         $data['subsidi_pupuk'] = $this->db->query($query)->result();
-        // $this->db->select('*');
-        // $this->db->from('subsidi_pupuk');
-        // $this->db->join('petani', 'subsidi_pupuk.id_petani = petani.id_petani', 'right');
-        // $this->db->where('subsidi_pupuk.id_petani IS NUlL');
-        // $data['petani_tersubsidi'] = $this->db->get()->num_rows() == 0;
 
         $data['role'] = $this->session->userdata('role');
         $data['title'] = 'Subsidi Pupuk';
@@ -125,19 +121,28 @@ class Subsidi extends CI_Controller
         redirect('subsidi');
     }
 
-    public function report()
+    public function report($type)
     {
         $query = "SELECT petani.*, petani.id_petani AS id_tani, subsidi_pupuk.*
             FROM petani
             LEFT JOIN subsidi_pupuk ON subsidi_pupuk.id_petani = petani.id_petani";
         $data['subsidi_pupuk'] = $this->db->query($query)->result();
         $data['title'] = 'Laporan Penyaluran Pupuk Subsidi';
-        $html = $this->load->view('subsidi/report', $data);
-        // $html = $this->load->view('subsidi/report', $data, true);
-        // $this->load->library('pdf');
-        // $this->pdf->setPaper('A4', 'landscape');
-        // $this->pdf->loadHtml($html);
-        // $this->pdf->render();
-        // $this->pdf->stream("laporan_subsidi_petani.pdf", array("Attachment" => false));
+        if ($type == 'excel') {
+            $this->load->view('subsidi/report_excel', $data);
+        } else {
+            // $this->load->view('subsidi/report_pdf', $data);
+            $html = $this->load->view('subsidi/report_pdf', $data, true);
+
+
+            // Atur DOMPDF
+            $this->dompdf_lib->loadHtml($html);
+            $this->dompdf_lib->setPaper('A4', 'landscape');
+            $this->dompdf_lib->render();
+
+            // Output file PDF
+            $id = random_int(1000, 9999);
+            $this->dompdf_lib->stream("rekap-$id.pdf", array("Attachment" => 0));
+        }
     }
 }

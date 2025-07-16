@@ -68,8 +68,9 @@
                 <th rowspan="2">NIK</th>
                 <th rowspan="2">Nama</th>
                 <th rowspan="2">Luas Tanah</th>
-                <th rowspan="2">Tanaman</th>
-                <th rowspan="2">Pupuk</th>
+                <th rowspan="2">Tanaman Bulan 1 - 4</th>
+                <th rowspan="2">Tanaman Bulan 5 - 8</th>
+                <th rowspan="2">Tanaman Bulan 9 - 12</th>
                 <th rowspan="2">Tanggal</th>
                 <th colspan="2" style="text-align: center;">Validasi</th>
             </tr>
@@ -86,8 +87,9 @@
                     <td><?= $item->nik ?></td>
                     <td><?= $item->nama ?></td>
                     <td><?= $item->luas_tanah ?> Hektar</td>
-                    <td><?= $item->jenis_tanaman ?></td>
-                    <td><?= $item->jenis_pupuk ? $item->jenis_pupuk : '-' ?></td>
+                    <td><?= $item->jenis_tanaman_1 ?></td>
+                    <td><?= $item->jenis_tanaman_2 ?></td>
+                    <td><?= $item->jenis_tanaman_3 ?></td>
                     <td><?= $item->tanggal ? $item->tanggal : '-' ?></td>
                     <td>
                         <?php if ($item->id_tani) : ?>

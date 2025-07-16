@@ -18,14 +18,12 @@
                 <th rowspan="2">NIK</th>
                 <th rowspan="2">Nama</th>
                 <th rowspan="2">Luas Tanah</th>
-                <th rowspan="2">Tanaman Bulan 1 - 3</th>
-                <th rowspan="2">Tanaman Bulan 4 - 5</th>
-                <th rowspan="2">Tanaman Bulan 6 - 9</th>
-                <th rowspan="2">Tanaman Bulan 10 - 12</th>
-                <th rowspan="2">Pupuk Bulan 1 - 3</th>
-                <th rowspan="2">Pupuk Bulan 4 - 5</th>
-                <th rowspan="2">Pupuk Bulan 6 - 9</th>
-                <th rowspan="2">Pupuk Bulan 10 - 12</th>
+                <th rowspan="2">Tanaman Bulan 1 - 4</th>
+                <th rowspan="2">Tanaman Bulan 5 - 8</th>
+                <th rowspan="2">Tanaman Bulan 9 - 12</th>
+                <th rowspan="2">Pupuk Bulan 1 - 4</th>
+                <th rowspan="2">Pupuk Bulan 5 - 8</th>
+                <th rowspan="2">Pupuk Bulan 69 - 12</th>
                 <th rowspan="2">Tanggal</th>
             </tr>
         </thead>
@@ -40,11 +38,9 @@
                     <td><?= $item->jenis_tanaman_1 ?></td>
                     <td><?= $item->jenis_tanaman_2 ?></td>
                     <td><?= $item->jenis_tanaman_3 ?></td>
-                    <td><?= $item->jenis_tanaman_4 ?></td>
                     <td><?= $item->jenis_pupuk_1 ? $item->jenis_pupuk_1 : '-' ?></td>
                     <td><?= $item->jenis_pupuk_2 ? $item->jenis_pupuk_2 : '-' ?></td>
                     <td><?= $item->jenis_pupuk_3 ? $item->jenis_pupuk_3 : '-' ?></td>
-                    <td><?= $item->jenis_pupuk_4 ? $item->jenis_pupuk_4 : '-' ?></td>
                     <td><?= $item->tanggal ? $item->tanggal : '-' ?></td>
                 </tr>
                 <?php $no++; ?>
@@ -59,17 +55,31 @@
             const ws = wb.addWorksheet('Sheet1');
 
             const rows = [];
+            const colWidths = [];
+
             for (let i = 0, row; row = table.rows[i]; i++) {
                 const cells = [];
                 for (let j = 0, col; col = row.cells[j]; j++) {
-                    cells.push(col.innerText);
+                    const cellText = col.innerText || '';
+                    cells.push(cellText);
+
+                    // Hitung panjang maksimum teks untuk autosize
+                    const cellLength = cellText.toString().length;
+                    if (!colWidths[j] || cellLength > colWidths[j]) {
+                        colWidths[j] = cellLength;
+                    }
                 }
                 rows.push(cells);
             }
 
             ws.addRows(rows);
 
-            // Gaya untuk setiap sel
+            // Set lebar kolom
+            ws.columns.forEach((column, index) => {
+                column.width = colWidths[index] + 2;
+            });
+
+            // Tambahkan border dan alignment
             ws.eachRow((row, rowNumber) => {
                 row.eachCell((cell, colNumber) => {
                     cell.border = {
@@ -93,7 +103,6 @@
                 });
             });
 
-            // Tentukan nama file
             filename = filename ? filename + '.xlsx' : 'excel_data.xlsx';
 
             const buffer = await wb.xlsx.writeBuffer();
@@ -103,9 +112,10 @@
             saveAs(blob, filename);
         }
 
+
         // Jalankan fungsi ekspor saat halaman dimuat
         window.onload = function() {
-            exportTableToExcel('myTable', 'laporan');
+            exportTableToExcel('myTable', 'laporan_subsidi_pupuk');
         }
     </script>
 </body>
